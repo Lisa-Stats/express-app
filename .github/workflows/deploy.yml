@@ -40,18 +40,20 @@ jobs:
     needs:
       - build-and-push
     steps:
-
       - name: Checkout Kustomize repo
         uses: actions/checkout@v3
         with:
           repository: Lisa-Stats/eks-express-kustomize
           token: ${{ secrets.PAT_TOKEN }}
-          path: main
 
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v2
 
-      - run: kustomize edit set image IMAGE:TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Set new image in config repo
+        env:
+          ECR_REPOSITORY: express
+          IMAGE_TAG: ${{ github.sha }}
+        run: kustomize edit set image IMAGE:TAG=${{ secrets.ECR_REGISTRY }}/$ECR_REPOSITORY:$IMAGE_TAG
         working-directory: overlays/dev
 
       - name: Commit new image tag to repo
