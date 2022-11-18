@@ -52,7 +52,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - run: kustomize edit set image IMAGE:TAG=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        working-directory: /overlays/dev
+        working-directory: overlays/dev
 
       - name: Commit new image tag to repo
         run: |
